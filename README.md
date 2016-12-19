@@ -20,7 +20,7 @@ Up to this point, we have focused on domains that only have two models, i.e. `Ar
 
 This type of relationship is probably the most common, but today we will be looking at another widely used and very useful relationship that will help build out more features and different types of features to our Rails apps.
 
-## Many-to-Many Relationships (10 minutes / 0:10)
+## Many-to-Many Relationships (10 minutes)
 
 Put simply, Many-to-Many relationships arise when one or more records in a table, has a relationship with one or more records in another table.
 
@@ -54,7 +54,7 @@ We can also add columns as needed to store additional information about the rela
 
 In order to do many-to-many relationships in Rails, convention says to create a new model to represent our join table. The name can technically be anything we want, but really the model name should be as descriptive as possible, and indicate that it represents an *association*.
 
-### You Do: Naming Join Tables (10 minutes / 0:20)
+### You Do: Naming Join Tables (10 minutes)
 
 In pairs, spend **5 minutes** answering the following questions for the below pairs of models...  
   1. Should the relationship between these two models be represented using a many-to-many relationship?
@@ -68,28 +68,40 @@ Models
   4. Blog Posts and Categories  
   5. Reddit Posts and Votes  
 
-### I Do: Generating the Model / Migration (10 minutes / 0:30)
+### We Do: Generating the Model / Migration (10 minutes)
 
-> **Note**: You are encouraged to **not** code along during this section -- just sit back and enjoy the ride! You will have the chance to implement this during in-class exercises with Tunr.  
+To get started:
 
-In order to see how to implement an example of a common many-to-many relationship in Rails, I'm going to build an event tracking application. For this app, I am only going to focus on the ability for a user to attend an event.
+1. Clone down [this repo](https://github.com/ga-wdi-exercises/tunr_rails_many_to_many/tree/favorites-starter)
+2. Checkout to the `favorites-starter` branch
+2. Run `$ bundle install`
+3. Run `$ rails db:drop db:create db:migrate db:seed` 
+
+In order to see how to implement an example of a common many-to-many relationship in Rails, I'm going to build out our tunr app, and you will repeat after me.
 
 <details>
-<summary>**Q**. What should the three models in our application be?</summary>
+<summary>**Q**. What should the four models in our application be?</summary>
 
-Let's call them: `User`, `Event`, and `Attendance`
+Let's call them: `User`, `Artist`, and `Song`, And now 'Favorite'.
 
 </details>
 
 ---
 
-For our domain's purposes, let's create a new model `Attendance` to represent the many-to-many relationship between our other two models: `User` and `Event`.
+> A `User` model and user authentication functionality has already been provided for you. Because of this, you may see some code in here -- particularly in `models/user.rb` and `routes.rb` that was added by the gem Devise
+
+> **Note**: Make sure to work off the `favorites-starter` branch.
+
+For our domain's purposes, let's create a new model `Favorite` to represent the many-to-many relationship between our other two models: `User` and `Song`.
 
 ```bash
-$ rails new attendance-tracker -d postgresql
-$ rails g model User username:string age:integer
-$ rails g model Event title:string location:string
+$ git clone https://github.com/ga-wdi-exercises/tunr_rails_many_to_many.git
+$ cd tunr_rails_many_to_many
+$ rails new . -d postgresql
+$ rails g model Favorite song_id:integer user_id:integer
 ```
+
+> **Note**: When we generated the Favorite model, we created our columns here and not in a migration.
 
 We generate the model just like any other. If we specify the attributes (i.e.,
 columns on the command line) Rails will automatically generate the correct
@@ -98,13 +110,13 @@ migration for us.
 Onto the model files...
 
 ```bash
-$ touch app/models/attendance.rb
+$ touch app/models/favorite.rb
 ```
 
 ```rb
-# models/attendance.rb
+# models/favorite.rb
 
-class Attendance < ActiveRecord::Base
+class Favorite < ActiveRecord::Base
   # Associations to come later...
 end
 ```
@@ -112,18 +124,17 @@ end
 Now the migration...  
 
 ```bash
-$ rails g migration create_attendances
+$ rails g migration create_favorites
 ```
 
 ```rb
-# db/migrate/*****_create_attendances.rb
+# db/migrate/*****_create_favorites.rb
 
-class CreateAttendances < ActiveRecord::Migration
+class CreateFavorites < ActiveRecord::Migration
   def change
     create_table :attendances do |t|
-      t.integer :num_guests, null: false
-      t.references :user, index: true, foreign_key: true
-      t.references :event, index: true, foreign_key: true
+      t.references :song_id, index: true, foreign_key: true
+      t.references :user_id, index: true, foreign_key: true
 
       t.timestamps null: false
     end
@@ -133,31 +144,10 @@ end
 
 > **What is `t.references`?** It does the same thing as writing out `belongs_to :model`.
 
-This will generate an Attendance table with `user_id`, `event_id` and `num_guest` columns. Take a look at it using `psql` in the Terminal.
+This will generate an Attendance table with `song_id` and `user_id` columns. Take a look at it using `psql` in the Terminal.
 
-### You Do: Create the Favorite Model in Tunr (10 minutes / 0:40)
 
-> 5 minutes exercise. 5 minutes review.
-
-For the in-class exercises you will be adding a "favoriting" feature to Tunr. In this version of Tunr, a user should be able to favorite a song.
-
-To get started:
-
-1. Clone down [this repo](https://github.com/ga-wdi-exercises/tunr_rails_many_to_many/tree/favorites-starter)
-2. Checkout to the `favorites-starter` branch
-2. Run `$ bundle install`
-3. Run `$ rails db:drop db:create db:migrate db:seed`
-
-> **Note**: Make sure to work off the `favorites-starter` branch.
-
-Then:
-
-- Create a model and migration for `Favorite`.
-  - It should have `song_id` and `user_id` columns.
-
-> A `User` model and user authentication functionality has already been provided for you. Because of this, you may see some code in here -- particularly in `models/user.rb` and `routes.rb` that was added by the gem Devise
-
-### Adding the ActiveRecord Relationships (10 minutes / 0:50)
+### Adding the ActiveRecord Relationships (10 minutes)
 
 Once we create our join model, we need to update our other models to indicate the associations between them. Let's visualize these associations with an ERD.
 
@@ -166,50 +156,39 @@ Once we create our join model, we need to update our other models to indicate th
 For example, in our Users/Events example, we should have this...
 
 ```ruby
-# models/attendance.rb
+# models/favorite.rb
 class Attendance < ActiveRecord::Base
-  belongs_to :event
+  belongs_to :song
   belongs_to :user
 end
 
-# models/event.rb
+# models/song.rb
 class Event < ActiveRecord::Base
-  has_many :attendances
-  has_many :users, through: :attendances
+  has_many :favorites
+  has_many :users, through: :favorites
 end
 
 # models/user.rb
 class User < ActiveRecord::Base
-  has_many :attendances
-  has_many :events, through: :attendances
+  has_many :favorites
+  has_many :events, through: :favorites
 end
 ```
 
-We're essentially defining `Attendance` as an intermediary model/table between `Event` and `User`. An event has many users through `Attendance` and vice versa.
+We're essentially defining `Favorite` as an intermediary model/table between `Song` and `User`. An event has many users through `Favorite` and vice versa.
 
-## Break (10 minutes / 1:00)
+## Break (10 minutes)
 
-### You Do: Update Tunr Models (10 minutes / 1:10)
 
-Take **5 minutes** to update the Song, User and Favorite models to ensure we have the
-correct associations.
-
-> If you finish early, go ahead and start testing out these new associations using the Rails console.
-
-### Testing Our Associations (10 minutes / 1:20)
 
 It's a good idea to use the `rails console` to test creating our associations.
 
-Here's an example of using the association of users / events...
+Here's an example of using the association of users / songs...
+
+Seed our data by running `rake db:seed`
 
 ```ruby
-bob = User.create({username: "Bob", age: 25})
-carly = User.create({username: "Carly", age: 28})
-
-prom = Event.create({title: "Under the Sea: 2015 Prom", location: "Greenville High School"})
-after_party = Event.create({title: "Eve's Awesome After-party", location: "Super Secret!" })
-brunch = Event.create({title: "BRUNCH!", location: "IHOP" })
-
+bob = User.create({email: "bob@gmail.com", 
 # We can create the association directly
 bob_going_to_the_prom = Attendance.create(user: bob, event: prom, num_guests: 1)
 
@@ -236,7 +215,7 @@ Attendance.where(user: bob, event: prom).destroy_all # will destroy all that mat
 prom.attendances.where(user: bob).destroy_all
 ```
 
-### We Do: Add Web Interface to Tunr (15 minutes / 1:35)
+### We Do: Add Web Interface to Tunr (15 minutes)
 
 So we've been able to generate associations between our models via the rails console. But what about our end users? How would somebody go about creating/removing a favorite on Tunr?
 
@@ -365,9 +344,9 @@ We've gone ahead a provided some starter code in `app/views/artists/show.html.er
 </ul>
 ```
 
-## Break (10 minutes / 1:45)
+## Break (10 minutes)
 
-### You Do: Update Songs Controller (20 minutes / 2:05)
+### You Do: Update Songs Controller (20 minutes)
 
 Take **15 minutes** to create the `add_favorite` and `remove_favorite` actions in the **songs controller**. Look at the `artists/show.html.erb` view to see how we route to these actions.
 
@@ -395,11 +374,15 @@ Because we are using Devise to handle user authentication, it gives us access to
 
 This means that in your controller you can write code like `Favorite.create(user: current_user)`.
 
+### Testing Our Associations (10 minutes)
+
+Lets play around with our app and check out the data in the `rails c` (console).
+
 #### If You Need the Solution...
 
 [...you can take a peek at it here.](https://github.com/ga-wdi-exercises/tunr_rails_many_to_many/tree/favorites-solution)
 
-## Closing Q&A (10 minutes / 2:15)
+## Closing Q&A (10 minutes)
 
 ## Bonus
 
