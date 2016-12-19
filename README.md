@@ -44,6 +44,8 @@ A join table is a separate intermediate table in our database whose job is to st
 about the relationship between our two models of the many-to-many. For each
 many-to-many relationship, we'll need one join table.
 
+![Join Table ERD](/Screen Shot 2016-12-19 at 10.21.37 AM.png)
+
 > Why are they called "join tables"? On a database level, join tables are created using SQL methods like `INNER JOIN` and `OUTER JOIN`. Learn more about them [here](http://www.sql-join.com/).
 
 Each join table should have, at minimum, **two foreign_key columns**. Each foreign key will represent one of the tables it's joining. In the example of `Doctors` and `Patients`, we would create a **new** join table that has a `doctor_id` column and a `patient_id` column.
