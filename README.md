@@ -82,7 +82,7 @@ In order to see how to implement an example of a common many-to-many relationshi
 <details>
 <summary>**Q**. What should the four models in our application be?</summary>
 
-Let's call them: `User`, `Artist`, and `Song`, And now 'Favorite'.
+Let's call them: `User`, `Artist`, and `Song`, And now `Favorite`.
 
 </details>
 
