@@ -2,9 +2,10 @@
 
 ## Learning Objectives
 
-* Differentiate between a one-to-many and a many-to-many relationship
-* Describe the role of a join table in a many-to-many relationship
-* Create a Model to represent a join table
+* Investigate the difference between a one-to-many and a many-to-many relationship
+* Distinguish what real world relationships can be formulated by many-to-many relationships
+* Analyze the role of a join table in a many-to-many relationship
+* Construct a Model to represent a join table
 * Use `has_many through` to connect two models via a join model in Rails
 * Use a many-to-many relationship to implement a feature in a Rails app
 
