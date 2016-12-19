@@ -95,9 +95,6 @@ Let's call them: `User`, `Artist`, and `Song`, And now `Favorite`.
 For our domain's purposes, let's create a new model `Favorite` to represent the many-to-many relationship between our other two models: `User` and `Song`.
 
 ```bash
-$ git clone https://github.com/ga-wdi-exercises/tunr_rails_many_to_many.git
-$ cd tunr_rails_many_to_many
-$ rails new . -d postgresql
 $ rails g model Favorite song_id:integer user_id:integer
 ```
 
@@ -178,42 +175,6 @@ end
 We're essentially defining `Favorite` as an intermediary model/table between `Song` and `User`. An event has many users through `Favorite` and vice versa.
 
 ## Break (10 minutes)
-
-
-
-It's a good idea to use the `rails console` to test creating our associations.
-
-Here's an example of using the association of users / songs...
-
-Seed our data by running `rake db:seed`
-
-```ruby
-bob = User.create({email: "bob@gmail.com", 
-# We can create the association directly
-bob_going_to_the_prom = Attendance.create(user: bob, event: prom, num_guests: 1)
-
-# Or using helper functionality
-bob.attendances.create(event: after_party, num_guests: 0)
-
-# Or the other way
-brunch.attendances.create(user: carly, num_guests: 10)
-prom.attendances.create(user: carly, num_guests: 1)
-
-# To see who's going to an event
-prom.users
-after_party.users
-brunch.users
-
-# To see a user's events
-bob.events
-carly.events
-
-# To delete an association
-Attendance.find_by(user: bob, event: prom).destroy # will only destroy the first one that matches
-
-Attendance.where(user: bob, event: prom).destroy_all # will destroy all that match
-prom.attendances.where(user: bob).destroy_all
-```
 
 ### We Do: Add Web Interface to Tunr (15 minutes)
 
