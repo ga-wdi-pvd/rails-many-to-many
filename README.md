@@ -118,11 +118,7 @@ migration for us.
 
 </details>
 
-Now the migration...  
-
-```bash
-$ rails g migration create_favorites
-```
+Let's take a look at the migration file that was created for us...
 
 ```rb
 # db/migrate/*****_create_favorites.rb
@@ -141,7 +137,7 @@ end
 
 > **What is `t.references`?** It does the same thing as writing out `belongs_to :model`.
 
-This will generate an Attendance table with `song_id` and `user_id` columns. Take a look at it using `psql` in the Terminal.
+This will generate an Favorite table with `song_id` and `user_id` columns. Take a look at it using `psql` in the Terminal.
 
 
 ### Adding the ActiveRecord Relationships (10 minutes)
