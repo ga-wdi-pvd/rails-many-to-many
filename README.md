@@ -13,8 +13,6 @@
 
 Let's think back to what we have learned so far in this unit. We now have the ability to model real world entities and their relationships, and have built web apps that have persisted data about these models.
 
-**Q**. Reviewing what we have learned about relational databases and ActiveRecord, what has been the predominate relationship we have used so far?
-
 ---
 
 Up to this point, we have focused on domains that only have two models, i.e. `Artists`, and `Songs`, which in turn have a strict one-to-many relationships. At it's core, we expressed these relationship with ActiveRecord methods, and linked the tables via a foreign key on the child table.
