@@ -107,19 +107,16 @@ We generate the model just like any other. If we specify the attributes (i.e.,
 columns on the command line) Rails will automatically generate the correct
 migration for us.
 
-Onto the model files...
+<details>
+<summary>**Q**. What files were create running the generate model command?</summary>
 
 ```bash
-$ touch app/models/favorite.rb
+      create    db/migrate/20161221191859_create_favorites.rb
+      create    app/models/application_record.rb
+      create    app/models/favorite.rb
 ```
 
-```rb
-# models/favorite.rb
-
-class Favorite < ActiveRecord::Base
-  # Associations to come later...
-end
-```
+</details>
 
 Now the migration...  
 
