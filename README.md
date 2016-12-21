@@ -154,7 +154,7 @@ class Favorite < ActiveRecord::Base
 end
 
 # models/song.rb
-class Event < ActiveRecord::Base
+class Song < ActiveRecord::Base
   has_many :favorites
   has_many :users, through: :favorites
 end
