@@ -151,13 +151,13 @@ This will generate an Attendance table with `song_id` and `user_id` columns. Tak
 
 Once we create our join model, we need to update our other models to indicate the associations between them. Let's visualize these associations with an ERD.
 
-**Board**: Diagram Attendance Tracker ERD
+**Board**: Diagram Favorite Tracker ERD
 
 For example, in our Users/Events example, we should have this...
 
 ```ruby
 # models/favorite.rb
-class Attendance < ActiveRecord::Base
+class Favorite < ActiveRecord::Base
   belongs_to :song
   belongs_to :user
 end
