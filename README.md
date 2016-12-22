@@ -123,9 +123,9 @@ Let's take a look at the migration file that was created for us...
 
 class CreateFavorites < ActiveRecord::Migration
   def change
-    create_table :attendances do |t|
-      t.references :song_id, index: true, foreign_key: true
-      t.references :user_id, index: true, foreign_key: true
+    create_table :favorites do |t|
+      t.references :song, index: true, foreign_key: true
+      t.references :user, index: true, foreign_key: true
 
       t.timestamps null: false
     end
@@ -162,7 +162,7 @@ end
 # models/user.rb
 class User < ActiveRecord::Base
   has_many :favorites
-  has_many :events, through: :favorites
+  has_many :songs, through: :favorites
 end
 ```
 
